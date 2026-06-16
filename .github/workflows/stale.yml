@@ -1,0 +1,69 @@
+name: Mark Stale Issues and PRs (FORK TEST)
+
+# TEST CONFIGURATION for verifying the stale automation in this fork.
+# Timings are shortened so the full lifecycle can be observed in ~1-2 hours
+# instead of weeks:
+#   - marked stale after ~1 hour of inactivity (days-before-stale: 0.0417)
+#   - closed on the next scheduled run once stale (days-before-close: 0)
+# The cron runs every 15 minutes and workflow_dispatch allows manual runs.
+# The production PR (branch `stale`) keeps the real 30-day / 7-day values.
+
+on:
+  schedule:
+    - cron: "*/15 * * * *" # every 15 minutes (testing only)
+  workflow_dispatch: {}
+
+permissions: {}
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/stale@eb5cf3af3ac0a1aa4c9c45633dd1ae542a27a899  # v10.3.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+          # Shortened windows for testing.
+          days-before-stale: 0.0417 # ~1 hour
+          days-before-close: 0       # close on the next run after going stale
+
+          # Labels applied when an item becomes stale.
+          stale-issue-label: stale
+          stale-pr-label: stale
+
+          # Messages posted when an item is marked stale.
+          stale-pr-message: >
+            (FORK TEST) This pull request has had no activity for ~1 hour and
+            has been marked as stale. It will be closed on the next run if no
+            further activity occurs.
+          stale-issue-message: >
+            (FORK TEST) This issue has had no activity for ~1 hour and has been
+            marked as stale. It will be closed on the next run if no further
+            activity occurs.
+
+          # Messages posted when an item is closed for being stale.
+          close-pr-message: >
+            (FORK TEST) This pull request was closed because it stayed stale
+            with no activity.
+          close-issue-message: >
+            (FORK TEST) This issue was closed because it stayed stale with no
+            activity.
+
+          # Remove the stale label as soon as there is new activity.
+          remove-stale-when-updated: true
+
+          # Labels that exempt an item from being marked stale. Empty for now.
+          exempt-issue-labels: ""
+          exempt-pr-labels: ""
+
+          # Skip PRs that are still open as drafts.
+          exempt-draft-pr: true
+
+          # Surface counts in the run summary so the test is easy to read.
+          enable-statistics: true
+
+          operations-per-run: 200
+          ascending: true
