@@ -1,16 +1,16 @@
 name: Mark Stale Issues and PRs (FORK TEST)
 
 # TEST CONFIGURATION for verifying the stale automation in this fork.
-# Timings are shortened so the full lifecycle can be observed in ~1-2 hours
+# Timings are shortened so the full lifecycle can be observed in minutes
 # instead of weeks:
-#   - marked stale after ~1 hour of inactivity (days-before-stale: 0.0417)
+#   - marked stale after ~10 minutes of inactivity (days-before-stale: 0.0069)
 #   - closed on the next scheduled run once stale (days-before-close: 0)
-# The cron runs every 15 minutes and workflow_dispatch allows manual runs.
+# The cron runs every 10 minutes and workflow_dispatch allows manual runs.
 # The production PR (branch `stale`) keeps the real 30-day / 7-day values.
 
 on:
   schedule:
-    - cron: "*/15 * * * *" # every 15 minutes (testing only)
+    - cron: "*/10 * * * *" # every 10 minutes (testing only)
   workflow_dispatch: {}
 
 permissions: {}
@@ -27,7 +27,7 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
           # Shortened windows for testing.
-          days-before-stale: 0.0417 # ~1 hour
+          days-before-stale: 0.0069 # ~10 minutes
           days-before-close: 0       # close on the next run after going stale
 
           # Labels applied when an item becomes stale.
@@ -36,13 +36,13 @@ jobs:
 
           # Messages posted when an item is marked stale.
           stale-pr-message: >
-            (FORK TEST) This pull request has had no activity for ~1 hour and
-            has been marked as stale. It will be closed on the next run if no
-            further activity occurs.
+            (FORK TEST) This pull request has had no activity for ~10 minutes
+            and has been marked as stale. It will be closed on the next run if
+            no further activity occurs.
           stale-issue-message: >
-            (FORK TEST) This issue has had no activity for ~1 hour and has been
-            marked as stale. It will be closed on the next run if no further
-            activity occurs.
+            (FORK TEST) This issue has had no activity for ~10 minutes and has
+            been marked as stale. It will be closed on the next run if no
+            further activity occurs.
 
           # Messages posted when an item is closed for being stale.
           close-pr-message: >
